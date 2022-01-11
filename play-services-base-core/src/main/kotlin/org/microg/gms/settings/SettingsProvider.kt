@@ -129,7 +129,7 @@ class SettingsProvider : ContentProvider() {
 
     private fun queryGcm(p: Array<out String>): Cursor = MatrixCursor(p).addRow(p) { key ->
         when (key) {
-            Gcm.ENABLE_GCM -> getSettingsBoolean(key, false)
+            Gcm.ENABLE_GCM -> getSettingsBoolean(key, true)
             Gcm.FULL_LOG -> getSettingsBoolean(key, true)
             Gcm.CONFIRM_NEW_APPS -> getSettingsBoolean(key, false)
 
