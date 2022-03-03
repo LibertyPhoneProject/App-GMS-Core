@@ -15,12 +15,12 @@ jobs:
           JAVA_OPTS: -Xmx2048m
 
       - name: Build APK
-        run: ./gradlew assembleRelease
+        run: ./gradlew assemblewithMapboxWithNearby
         
       - name: Minipulate Output APK
         run: |
           mkdir actionfiles
-          mv app/build/outputs/apk/release/app-release-unsigned.apk actionfiles/com.google.android.gms.apk
+          mv play-services-core/build/outputs/apk/withMapboxWithNearby/release/play-services-core-withMapbox-withNearby-release-unsigned.apk actionfiles/com.google.android.gms.apk
         
       - name: Upload to Artifacts
         uses: actions/upload-artifact@v2
