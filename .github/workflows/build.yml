@@ -1,5 +1,7 @@
-name: Build
+name: APK Builder
+
 on: [pull_request, push]
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -11,3 +13,41 @@ jobs:
         env:
           TERM: dumb
           JAVA_OPTS: -Xmx2048m
+
+      - name: Build APK
+        run: ./gradlew assembleRelease
+        
+      - name: Minipulate Output APK
+        run: |
+          mkdir actionfiles
+          mv app/build/outputs/apk/release/app-release-unsigned.apk actionfiles/com.google.android.gms.apk
+        
+      - name: Upload to Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: 'Camera'
+          path: actionfiles
+          
+      - name: Push a file to another repository
+        uses: dmnemec/copy_file_to_another_repo_action@v1.1.1
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+        with:
+          source_file: 'actionfiles/com.google.android.gms.apk'
+          destination_repo: 'LibertyPhoneProject/Vendor-GMS'
+          destination_folder: 'GmsCore'
+          user_email: 'libbot@kuzoncode.com'
+          user_name: 'libbot'
+          destination_branch: 'master'
+          
+      - name: Push a file to another repository
+        uses: dmnemec/copy_file_to_another_repo_action@v1.1.1
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+        with:
+          source_file: 'actionfiles/com.google.android.gms.apk'
+          destination_repo: 'LibertyPhoneProject/Vendor-GMS'
+          destination_folder: 'GmsCore'
+          user_email: 'libbot@kuzoncode.com'
+          user_name: 'libbot'
+          destination_branch: 'reduce'
